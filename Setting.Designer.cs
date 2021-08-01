@@ -53,6 +53,7 @@
             this.numbersModeCheckBox = new System.Windows.Forms.CheckBox();
             this.graphColorsGroupBox = new System.Windows.Forms.GroupBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.cbOfflineCounter = new System.Windows.Forms.CheckBox();
             this.cbStartupRun = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label11 = new System.Windows.Forms.Label();
@@ -71,7 +72,6 @@
             this.label9 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.cbOfflineCounter = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.delay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.maxPing)).BeginInit();
             this.tabControl1.SuspendLayout();
@@ -247,9 +247,9 @@
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(6, 36);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(103, 15);
+            this.label6.Size = new System.Drawing.Size(102, 15);
             this.label6.TabIndex = 0;
-            this.label6.Text = "Max ping interval:";
+            this.label6.Text = "Max ping latency:";
             // 
             // maxPing
             // 
@@ -377,14 +377,24 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Advanced";
             // 
+            // cbOfflineCounter
+            // 
+            this.cbOfflineCounter.AutoSize = true;
+            this.cbOfflineCounter.Location = new System.Drawing.Point(6, 255);
+            this.cbOfflineCounter.Name = "cbOfflineCounter";
+            this.cbOfflineCounter.Size = new System.Drawing.Size(132, 19);
+            this.cbOfflineCounter.TabIndex = 14;
+            this.cbOfflineCounter.Text = "Offline time counter";
+            this.cbOfflineCounter.UseVisualStyleBackColor = true;
+            // 
             // cbStartupRun
             // 
             this.cbStartupRun.AutoSize = true;
             this.cbStartupRun.Location = new System.Drawing.Point(6, 280);
             this.cbStartupRun.Name = "cbStartupRun";
-            this.cbStartupRun.Size = new System.Drawing.Size(159, 19);
+            this.cbStartupRun.Size = new System.Drawing.Size(309, 19);
             this.cbStartupRun.TabIndex = 13;
-            this.cbStartupRun.Text = "Run on Windows startup";
+            this.cbStartupRun.Text = "Run on Windows startup (creates Startup menu link)";
             this.cbStartupRun.UseVisualStyleBackColor = true;
             // 
             // groupBox2
@@ -555,16 +565,6 @@
             this.pictureBox1.Size = new System.Drawing.Size(64, 64);
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
-            // 
-            // cbOfflineCounter
-            // 
-            this.cbOfflineCounter.AutoSize = true;
-            this.cbOfflineCounter.Location = new System.Drawing.Point(6, 255);
-            this.cbOfflineCounter.Name = "cbOfflineCounter";
-            this.cbOfflineCounter.Size = new System.Drawing.Size(132, 19);
-            this.cbOfflineCounter.TabIndex = 14;
-            this.cbOfflineCounter.Text = "Offline time counter";
-            this.cbOfflineCounter.UseVisualStyleBackColor = true;
             // 
             // Setting
             // 

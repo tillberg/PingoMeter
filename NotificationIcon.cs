@@ -52,6 +52,7 @@ namespace PingoMeter
         }
 
         AlarmEnum alarmStatus;
+        DateTime lastAlarmTime = DateTime.Now;
 
         StartupCreator startupManager = new StartupViaLink(Application.StartupPath + @"\Resources\op.ico");
 
@@ -74,8 +75,8 @@ namespace PingoMeter
             };
 
             SFXConnectionLost = new SoundPlayer();
-            SFXTimeOut        = new SoundPlayer();
-            SFXResumed        = new SoundPlayer();
+            SFXTimeOut = new SoundPlayer();
+            SFXResumed = new SoundPlayer();
 
             var apppath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             originalImage = Image.FromFile(System.IO.Path.Combine(apppath, "Resources\\none.png"));
@@ -84,7 +85,7 @@ namespace PingoMeter
             noneIcon = Icon.FromHandle(hiconOriginal);
             g = Graphics.FromImage(drawable);
             font = new Font("Consolas", 9f, FontStyle.Bold);
-            font100 = new Font("Consolas", 7f, FontStyle.Bold);;
+            font100 = new Font("Consolas", 7f, FontStyle.Bold); ;
             SetIcon();
         }
 
@@ -146,11 +147,11 @@ namespace PingoMeter
                     }
 
                     var useFont = font;
-                    if (offlineElapsed > 100) useFont = font100;
-                    if (offlineElapsed > 999) offlineElapsed = 999;
+                    if (offlineElapsed > 99) offlineElapsed = 99;
+                    var offlineElapsedStr = offlineElapsed.ToString().PadLeft(2);
 
                     g.FillRectangle(Brushes.Red, 0, 0, 16, 16);
-                    g.DrawString(offlineElapsed.ToString(), useFont, Brushes.Black, -1, 1);
+                    g.DrawString(offlineElapsedStr, useFont, Brushes.Black, -1, 1);
                     SetIcon();
                 }
             }
@@ -213,9 +214,10 @@ namespace PingoMeter
 
                     if (value > 99)
                         value = 99;
+                    var valueStr = value.ToString().PadLeft(2);
 
                     g.FillRectangle(bgBrush, 0, 0, 16, 16);
-                    g.DrawString(value.ToString(), font, fontBrush, -1, 1);
+                    g.DrawString(valueStr, font, fontBrush, -1, 1);
                     SetIcon();
                 }
                 else
@@ -268,7 +270,7 @@ namespace PingoMeter
                 {
                     try
                     {
-                        PingReply reply = p.Send(Config.TheIPAddress, 5000, buffer);
+                        PingReply reply = p.Send(Config.TheIPAddress, 500, buffer);
 
                         switch (reply.Status)
                         {
@@ -278,12 +280,13 @@ namespace PingoMeter
                                 if (timeOutAgain)
                                 {
                                     notifyIcon.Text = "Status: Time out";
-                                    if (alarmStatus == AlarmEnum.OK)
+                                    if (alarmStatus == AlarmEnum.OK || DateTime.Now.Subtract(lastAlarmTime).TotalSeconds > 5)
                                     {
                                         if (Config.AlarmTimeOut)
                                             notifyIcon.ShowBalloonTip(BALLOON_TIP_TIME_OUT, "PingoMeter", "Ping time out", ToolTipIcon.Warning);
 
                                         PlaySound(SFXTimeOut, Config.SFXTimeOut);
+                                        lastAlarmTime = DateTime.Now;
                                     }
 
                                     alarmStatus = AlarmEnum.TimeOut;
@@ -318,9 +321,10 @@ namespace PingoMeter
 
 
 
-                                if (alarmStatus != AlarmEnum.ConnectionLost)
+                                if (alarmStatus != AlarmEnum.ConnectionLost || DateTime.Now.Subtract(lastAlarmTime).TotalSeconds > 5)
                                 {
                                     PlaySound(SFXConnectionLost, Config.SFXConnectionLost);
+                                    lastAlarmTime = DateTime.Now;
 
                                     if (Config.AlarmConnectionLost)
                                         notifyIcon.ShowBalloonTip(BALLOON_TIP_TIME_OUT, "PingoMeter", statusName, ToolTipIcon.Error);
@@ -335,9 +339,10 @@ namespace PingoMeter
                         DrawGraph(-1L);
                         notifyIcon.Text = "Status: Connection lost.";
 
-                        if (alarmStatus != AlarmEnum.ConnectionLost)
+                        if (alarmStatus != AlarmEnum.ConnectionLost || DateTime.Now.Subtract(lastAlarmTime).TotalSeconds > 5)
                         {
                             PlaySound(SFXConnectionLost, Config.SFXConnectionLost);
+                            lastAlarmTime = DateTime.Now;
 
                             if (Config.AlarmConnectionLost)
                                 notifyIcon.ShowBalloonTip(BALLOON_TIP_TIME_OUT, "PingoMeter", "Connection lost", ToolTipIcon.Error);
@@ -402,26 +407,23 @@ namespace PingoMeter
 
             if (dlgResult == DialogResult.OK)
             {
-                if (Utils.IsWindows8Next()) // bug in win8+ for startup
+                if (Config.RunOnStartup)
                 {
-                    if (Config.RunOnStartup)
+                    if (!startupManager.IsInStartup())
                     {
-                        if (!startupManager.IsInStartup())
+                        if (!startupManager.RunOnStartup())
                         {
-                            if (!startupManager.RunOnStartup())
-                            {
-                                MessageBox.Show("Adding to autorun is failed!");
-                            }
+                            MessageBox.Show("Adding to autorun is failed!");
                         }
                     }
-                    else
+                }
+                else
+                {
+                    if (startupManager.IsInStartup())
                     {
-                        if (startupManager.IsInStartup())
+                        if (!startupManager.RemoveFromStartup())
                         {
-                            if (!startupManager.RemoveFromStartup())
-                            {
-                                MessageBox.Show("Failed on disabling autorun!");
-                            }
+                            MessageBox.Show("Failed on disabling autorun!");
                         }
                     }
                 }

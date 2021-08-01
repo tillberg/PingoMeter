@@ -16,23 +16,16 @@ namespace PingoMeter
         {
             InitializeComponent();
             SyncFromConfig();
-            labelVersion.Text = "Version " + Program.VERSION;
+            labelVersion.Text = "Version " + Program.VERSION + " (plus tweaks by Tillberg)";
             toolTip1.SetToolTip(numbersModeCheckBox, "Use numbers for the ping instead of a graph.");
 
-            pingTimeoutSFXBtn.Click      += SelectWAV;
-            connectionLostSFXBtn.Click   += SelectWAV;
+            pingTimeoutSFXBtn.Click += SelectWAV;
+            connectionLostSFXBtn.Click += SelectWAV;
             connectionResumeSFXBtn.Click += SelectWAV;
 
-            pingTimeoutSFXBtn.MouseDown      += (s, e) => ClearSFX(pingTimeoutSFXBtn, e);
-            connectionLostSFXBtn.MouseDown   += (s, e) => ClearSFX(connectionLostSFXBtn, e);
+            pingTimeoutSFXBtn.MouseDown += (s, e) => ClearSFX(pingTimeoutSFXBtn, e);
+            connectionLostSFXBtn.MouseDown += (s, e) => ClearSFX(connectionLostSFXBtn, e);
             connectionResumeSFXBtn.MouseDown += (s, e) => ClearSFX(connectionResumeSFXBtn, e);
-
-            if (Utils.IsWindows8Next())
-            {
-                cbStartupRun.Enabled = false;
-                cbStartupRun.Visible = false;
-                Config.RunOnStartup = false;
-            }
 
             loaded = true;
         }
@@ -60,19 +53,19 @@ namespace PingoMeter
 
         private void SyncFromConfig()
         {
-            delay.Value   = Config.Delay;
+            delay.Value = Config.Delay;
             maxPing.Value = Config.MaxPing;
 
-            setBgColor.BackColor     = Config.BgColor.Color;
-            setGoodColor.BackColor   = Config.GoodColor.Color;
+            setBgColor.BackColor = Config.BgColor.Color;
+            setGoodColor.BackColor = Config.GoodColor.Color;
             setNormalColor.BackColor = Config.NormalColor.Color;
-            setBadColor.BackColor    = Config.BadColor.Color;
+            setBadColor.BackColor = Config.BadColor.Color;
 
-            alarmTimeOut.Checked        = Config.AlarmTimeOut;
+            alarmTimeOut.Checked = Config.AlarmTimeOut;
             alarmConnectionLost.Checked = Config.AlarmConnectionLost;
-            alarmResumed.Checked        = Config.AlarmResumed;
+            alarmResumed.Checked = Config.AlarmResumed;
             numbersModeCheckBox.Checked = Config.UseNumbers;
-            cbStartupRun.Checked        = Config.RunOnStartup;
+            cbStartupRun.Checked = Config.RunOnStartup;
             cbOfflineCounter.Checked = Config.OfflineCounter;
 
             //isStartUp.Checked = Config.s_runOnStartup;
@@ -80,8 +73,8 @@ namespace PingoMeter
             if (Config.TheIPAddress != null)
                 ipAddress.Text = Config.TheIPAddress.ToString();
 
-            SetSoundInfoForButtom(pingTimeoutSFXBtn,      Config.SFXTimeOut);
-            SetSoundInfoForButtom(connectionLostSFXBtn,   Config.SFXConnectionLost);
+            SetSoundInfoForButtom(pingTimeoutSFXBtn, Config.SFXTimeOut);
+            SetSoundInfoForButtom(connectionLostSFXBtn, Config.SFXConnectionLost);
             SetSoundInfoForButtom(connectionResumeSFXBtn, Config.SFXResumed);
         }
 

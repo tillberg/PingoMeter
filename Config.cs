@@ -11,7 +11,7 @@ namespace PingoMeter
 
         private const string CONF_FILE_NAME = "config.txt";
 
-        public static int Delay = 3000;
+        public static int Delay = 500;
 
         public static int MaxPing;
         public static bool OfflineCounter = true;
@@ -80,7 +80,7 @@ namespace PingoMeter
 
         public static void Reset()
         {
-            Delay               = 3000;
+            Delay               = 400;
             MaxPing             = 250;
             OfflineCounter      = true;
             BgColor             = new Pen(Color.FromArgb(70, 0, 0));
@@ -92,10 +92,10 @@ namespace PingoMeter
             AlarmConnectionLost = false;
             AlarmTimeOut        = false;
             AlarmResumed        = false;
-            UseNumbers          = false;
-            SFXConnectionLost   = NONE_SFX;
-            SFXTimeOut          = NONE_SFX;
-            SFXResumed          = NONE_SFX;
+            UseNumbers          = true;
+            SFXConnectionLost   = @"C:\Windows\Media\Windows Hardware Fail.wav";
+            SFXTimeOut          = @"C:\Windows\Media\Windows Hardware Fail.wav";
+            SFXResumed          = @"C:\Windows\Media\Windows Unlock.wav";
             RunOnStartup        = false;
         }
 
